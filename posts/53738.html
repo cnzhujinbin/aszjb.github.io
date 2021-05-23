@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"douzujun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":280,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基于python 从零实现NLP聊天机器人">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch-从零开发NLP聊天机器人">
+<meta property="og:url" content="https://douzujun.github.io/posts/53738.html">
+<meta property="og:site_name" content="Douzi&#39;s Blog">
+<meta property="og:description" content="基于python 从零实现NLP聊天机器人">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905124836635-1199875296.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905170054672-1508205467.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905170234936-535970560.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181351884-416050950.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181645629-1821701734.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181737439-1973410367.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905182226165-2078007290.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905231815959-778744901.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905234801950-355607453.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905234935857-777057823.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905175021602-2048815200.png">
+<meta property="article:published_time" content="2020-09-06T08:38:18.000Z">
+<meta property="article:modified_time" content="2020-09-06T08:47:58.562Z">
+<meta property="article:author" content="Douzi">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="自然语言处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905124836635-1199875296.png">
+
+<link rel="canonical" href="https://douzujun.github.io/posts/53738.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pytorch-从零开发NLP聊天机器人 | Douzi's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3b62b9094ecc903a483628b8bef2545e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Douzi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://douzujun.github.io/posts/53738.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Douzi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Douzi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pytorch-从零开发NLP聊天机器人
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-06 16:38:18 / 修改时间：16:47:58" itemprop="dateCreated datePublished" datetime="2020-09-06T16:38:18+08:00">2020-09-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>基于python 从零实现NLP聊天机器人</p>
+<a id="more"></a>
+<p><a href="https://github.com/douzujun/NLP-Chatbot" target="_blank" rel="noopener">全部代码</a></p>
+<p><a href="https://share.weiyun.com/5Yb4vI4" target="_blank" rel="noopener">已训练模型</a></p>
+<h1 id="聊天机器人综合介绍">聊天机器人综合介绍</h1>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905124836635-1199875296.png" style="width:700px; height:350px"></p>
+<h1 id="nlp基础">NLP基础</h1>
+<ul>
+<li><font size="4px"><strong>NLP领域</strong></font></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905170054672-1508205467.png" style="width:400px;height=500px"><br></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905170234936-535970560.png" style="width:350px;height=450px"></p>
+<ul>
+<li><font size="4px"><strong>NLP研究难点</strong></font></li>
+</ul>
+<blockquote>
+<ul>
+<li><p>单词边界界定</p></li>
+<li><p>词义的消歧</p></li>
+<li><p>不规范的输入</p></li>
+<li><p>句法的模糊性</p></li>
+<li><p>语言行为与计划</p></li>
+</ul>
+</blockquote>
+<ul>
+<li><font color="red" size="4px"><strong>词处理</strong></font></li>
+</ul>
+<blockquote>
+<ul>
+<li><p>分词</p></li>
+<li><font color="red">词性标注(Part-of-speech tagging)</font>
+<ul>
+<li>把分好的词一个一个分类(如, 动词, 形容词，名词)</li>
+</ul></li>
+<li>实体识别
+<ul>
+<li>名词识别</li>
+</ul></li>
+<li>词义消歧
+<ul>
+<li>联系上下文</li>
+</ul></li>
+</ul>
+</blockquote>
+<ul>
+<li><font color="red" size="4px"><strong>语句处理</strong></font></li>
+</ul>
+<blockquote>
+<ul>
+<li><font color="red">句法分析(Syntactic Analysis)</font>
+<ul>
+<li>“我去北京天安门”: 主谓分开</li>
+</ul></li>
+<li><font color="red">语义分析(Senmantic Analysis)</font>
+<ul>
+<li>句子的理解</li>
+</ul></li>
+<li><p><font color="red">机器翻译</font></p></li>
+<li><p><strong>语音合成</strong></p></li>
+</ul>
+</blockquote>
+<ul>
+<li><font size="4px"><strong>篇章处理</strong></font></li>
+</ul>
+<blockquote>
+<ul>
+<li>自动文摘
+<ul>
+<li>机器读文章，写出摘要</li>
+</ul></li>
+</ul>
+</blockquote>
+<ul>
+<li><font size="4px"><strong>统计语言模型</strong></font></li>
+</ul>
+<blockquote>
+<ul>
+<li><p><a href="https://www.cnblogs.com/douzujun/p/13021227.html#_label1_1" target="_blank" rel="noopener">N-gram统计模型</a></p></li>
+<li><p>马尔科夫模型</p></li>
+<li><p>隐马尔科夫模型</p></li>
+</ul>
+</blockquote>
+<h2 id="分词">分词</h2>
+<ul>
+<li><p>把句子变成词</p></li>
+<li><p><strong>分词难点</strong></p></li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>分词标准</strong></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181351884-416050950.png"></p>
+<ul>
+<li><strong>切分歧义(分词造成的语义分歧)</strong>
+<ul>
+<li>分词细粒度不同： <img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181645629-1821701734.png"></li>
+<li>真正存在歧义的句子： <img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905181737439-1973410367.png"></li>
+<li>交集型的歧义 <img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905182226165-2078007290.png"></li>
+</ul></li>
+<li><strong>新词</strong>
+<ul>
+<li>给力，花呗，贸易战等等</li>
+</ul></li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>分词的算法</strong></li>
+</ul>
+<blockquote>
+<ul>
+<li>基于词典的分词算法
+<ul>
+<li>正向最大匹配法</li>
+<li>逆向最大匹配法</li>
+<li>双向匹配分词<br>
+</li>
+<li>全切分路径选择</li>
+</ul></li>
+<li>基于统计的分词算法
+<ul>
+<li>HMM，隐马尔科夫模型</li>
+<li>CRF，条件随机场</li>
+<li>深度学习</li>
+</ul></li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"></span><br><span class="line">seg_list = jieba.cut(<span class="string">'我来到北京清华大学'</span>, cut_all=<span class="literal">True</span>)</span><br><span class="line">print(<span class="string">'Full Mode: '</span> + <span class="string">'/ '</span>.join(seg_list))      <span class="comment"># 全模式</span></span><br><span class="line"><span class="comment"># Full Mode: 我/ 来到/ 北京/ 清华/ 清华大学/ 华大/ 大学</span></span><br><span class="line"></span><br><span class="line">seg_list = jieba.cut(<span class="string">'我来到北京清华大学'</span>, cut_all=<span class="literal">False</span>)</span><br><span class="line">print(<span class="string">'Default Mode: '</span> + <span class="string">'/ '</span>.join(seg_list))   <span class="comment"># 精确模式</span></span><br><span class="line"><span class="comment"># Default Mode: 我/ 来到/ 北京/ 清华大学</span></span><br><span class="line"></span><br><span class="line">seg_list = jieba.cut(<span class="string">'他来到了网易杭研大厦'</span>)    <span class="comment"># 默认是精确模式</span></span><br><span class="line">print(<span class="string">'/ '</span>.join(seg_list))</span><br><span class="line"><span class="comment"># 他/ 来到/ 了/ 网易/ 杭研/ 大厦</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索引擎模式</span></span><br><span class="line">seg_list = jieba.cut_for_search(<span class="string">'小明硕士毕业于中国科学院计算所，后在日本京都大学深造'</span>)</span><br><span class="line">print(<span class="string">'/ '</span>.join(seg_list))</span><br><span class="line"><span class="comment"># 小明/ 硕士/ 毕业/ 于/ 中国/ 科学/ 学院/ 科学院/ 中国科学院/ 计算/ 计算所/ ，/ 后/ 在/ 日本/ 京都/ 大学/ 日本京都大学/ 深造</span></span><br></pre></td></tr></table></figure>
+<h2 id="tf-idf">TF-IDF</h2>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905231815959-778744901.png"> <img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905234801950-355607453.png"> <img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905234935857-777057823.png"></p>
+<ul>
+<li><p><strong>TF-IDF的作用</strong></p>
+<ul>
+<li>提取文本向量的特征</li>
+</ul></li>
+<li><p><strong>TF-IDF算法代码示例</strong></p></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np   <span class="comment"># 数值计算、矩阵运算、向量运算</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd  <span class="comment"># 数值分析、科学计算</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 定义数据和预处理</span></span><br><span class="line"><span class="comment"># 定义文档</span></span><br><span class="line">docA = <span class="string">'The cat sat on my bed'</span></span><br><span class="line">docB = <span class="string">'The dog sat on my knees'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切割文档</span></span><br><span class="line">bowA = docA.split(<span class="string">' '</span>)</span><br><span class="line">bowB = docB.split(<span class="string">' '</span>)</span><br><span class="line"><span class="comment"># bowA # ['The', 'cat', 'sat', 'on', 'my', 'bed']</span></span><br><span class="line"><span class="comment"># bowB # ['The', 'dog', 'sat', 'on', 'my', 'knees']</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建词库</span></span><br><span class="line">wordSet = set(bowA).union(set(bowB))</span><br><span class="line"><span class="comment"># wordSet # &#123;'The', 'bed', 'cat', 'dog', 'knees', 'my', 'on', 'sat'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 进行词数统计</span></span><br><span class="line"><span class="comment"># 用字典来保存词出现的次数</span></span><br><span class="line">wordDictA = dict.fromkeys(wordSet, <span class="number">0</span>)</span><br><span class="line">wordDictB = dict.fromkeys(wordSet, <span class="number">0</span>)</span><br><span class="line">wordDictA</span><br><span class="line">wordDictB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历文档，统计词数</span></span><br><span class="line"><span class="keyword">for</span> word <span class="keyword">in</span> bowA:</span><br><span class="line">    wordDictA[word] += <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> word <span class="keyword">in</span> bowB:</span><br><span class="line">    wordDictB[word] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">pd.DataFrame([wordDictA, wordDictB])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 计算词频 TF</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">computeTF</span><span class="params">(wordDict, bow)</span>:</span></span><br><span class="line">    <span class="comment"># 用一个字典对象保存 TF，把所有对应于 bow 文档里的 TF都计算出来</span></span><br><span class="line">    tfDict = &#123;&#125;</span><br><span class="line">    nbowCount = len(bow)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> word, count <span class="keyword">in</span> wordDict.items():</span><br><span class="line">        tfDict[word] = count / nbowCount</span><br><span class="line">    <span class="keyword">return</span> tfDict</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">tfA = computeTF(wordDictA, bowA)</span><br><span class="line">tfB = computeTF(wordDictB, bowB)</span><br><span class="line">print(tfA)</span><br><span class="line">print(tfB)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 计算逆文档频率 IDF</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">computeIDF</span><span class="params">(wordDictList)</span>:</span></span><br><span class="line">    <span class="comment"># 用一个字典对象保存 IDF，每个词作为 key，初始值为 0</span></span><br><span class="line">    idfDict = dict.fromkeys(wordDictList[<span class="number">0</span>], <span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 总文档数量</span></span><br><span class="line">    N = len(wordDictList)</span><br><span class="line">    <span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> wordDict <span class="keyword">in</span> wordDictList:</span><br><span class="line">        <span class="comment"># 遍历字典中的每个词汇，统计 Ni</span></span><br><span class="line">        <span class="keyword">for</span> word, count <span class="keyword">in</span> wordDict.items():</span><br><span class="line">            <span class="keyword">if</span> count &gt; <span class="number">0</span> :</span><br><span class="line">                <span class="comment"># 先把 Ni 增加 1，存入到 idfDict 中</span></span><br><span class="line">                idfDict[word] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 已经得到所有词汇 i 对应的 Ni，现在根据公式把它替换成 idf 值</span></span><br><span class="line">    <span class="keyword">for</span> word, Ni <span class="keyword">in</span> idfDict.items():</span><br><span class="line">        idfDict[word] = math.log10((N + <span class="number">1</span>)/(Ni + <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> idfDict</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">idfs = computeIDF([wordDictA, wordDictB])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 计算 TF-IDF</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">computeTFIDF</span><span class="params">(tf, idfs)</span>:</span></span><br><span class="line">    tfidf = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> word, tfval <span class="keyword">in</span> tf.items():</span><br><span class="line">        tfidf[word] = tfval * idfs[word]</span><br><span class="line">    <span class="keyword">return</span> tfidf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">tfidfA = computeTFIDF(tfA, idfs)</span><br><span class="line">tfidfB = computeTFIDF(tfB, idfs)</span><br><span class="line"></span><br><span class="line">pd.DataFrame([tfidfA, tfidfB])</span><br><span class="line"></span><br><span class="line"><span class="comment">#       knees	   cat	        sat	The	on	dog	        bed	        my</span></span><br><span class="line"><span class="comment"># 0	0.000000   0.029349	0.0	0.0	0.0	0.000000	0.029349	0.0</span></span><br><span class="line"><span class="comment"># 1	0.029349   0.000000	0.0	0.0	0.0	0.029349	0.000000	0.0</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>scikit-learn计算TF-IDF</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfTransformer</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">corpus = [<span class="string">'I come to China to travel'</span>,</span><br><span class="line">          <span class="string">'This is a car polupar in China'</span>,</span><br><span class="line">          <span class="string">'I love tea and Apple'</span>,</span><br><span class="line">          <span class="string">'The work is to write some papers in science'</span>]</span><br><span class="line"></span><br><span class="line">vectorizer = CountVectorizer()</span><br><span class="line"></span><br><span class="line">transformer = TfidfTransformer()</span><br><span class="line">tfidf = transformer.fit_transform(vectorizer.fit_transform(corpus))</span><br><span class="line">print(tfidf)</span><br></pre></td></tr></table></figure>
+<details>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0</span>, <span class="number">16</span>) <span class="number">0.4424621378947393</span></span><br><span class="line">(<span class="number">0</span>, <span class="number">15</span>) <span class="number">0.697684463383976</span></span><br><span class="line">(<span class="number">0</span>, <span class="number">4</span>)  <span class="number">0.4424621378947393</span></span><br><span class="line">(<span class="number">0</span>, <span class="number">3</span>)  <span class="number">0.348842231691988</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">14</span>) <span class="number">0.45338639737285463</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">9</span>)  <span class="number">0.45338639737285463</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">6</span>)  <span class="number">0.3574550433419527</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">5</span>)  <span class="number">0.3574550433419527</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">3</span>)  <span class="number">0.3574550433419527</span></span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>)  <span class="number">0.45338639737285463</span></span><br><span class="line">(<span class="number">2</span>, <span class="number">12</span>) <span class="number">0.5</span></span><br><span class="line">(<span class="number">2</span>, <span class="number">7</span>)  <span class="number">0.5</span></span><br><span class="line">(<span class="number">2</span>, <span class="number">1</span>)  <span class="number">0.5</span></span><br><span class="line">(<span class="number">2</span>, <span class="number">0</span>)  <span class="number">0.5</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">18</span>) <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">17</span>) <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">15</span>) <span class="number">0.2811316284405006</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">13</span>) <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">11</span>) <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">10</span>) <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">8</span>)  <span class="number">0.3565798233381452</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">6</span>)  <span class="number">0.2811316284405006</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">5</span>)  <span class="number">0.2811316284405006</span></span><br></pre></td></tr></table></figure>
+</details>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"> </span><br><span class="line">tfidf = TfidfVectorizer()</span><br><span class="line"> </span><br><span class="line">corpus=[<span class="string">"我 来到 北京 清华大学"</span>,          <span class="comment"># 第一类文本切词后的结果，词之间以空格隔开</span></span><br><span class="line">        <span class="string">"他 来到 了 网易 杭研 大厦"</span>,      <span class="comment"># 第二类文本的切词结果</span></span><br><span class="line">        <span class="string">"小明 硕士 毕业 与 中国 科学院"</span>,  <span class="comment"># 第三类文本的切词结果</span></span><br><span class="line">        <span class="string">"我 爱 北京 天安门"</span>]              <span class="comment"># 第四类文本的切词结果</span></span><br><span class="line"> </span><br><span class="line">result = tfidf.fit_transform(corpus).toarray()</span><br><span class="line">print(result)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计关键词</span></span><br><span class="line">word = tfidf.get_feature_names()</span><br><span class="line">print(word)</span><br><span class="line"><span class="comment"># 统计关键词出现次数，几句话对比几次</span></span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> tfidf.vocabulary_.items():</span><br><span class="line">    print(k,v)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 对比第i类文本的词语tf-idf权重</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(result)):</span><br><span class="line">    print(<span class="string">'----------------------'</span>,i,<span class="string">'--------------------'</span>)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(word)):</span><br><span class="line">        print(word[j],result[i][j])</span><br></pre></td></tr></table></figure>
+<details>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">0.</span>         <span class="number">0.52640543</span> <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.52640543</span></span><br><span class="line">  <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.66767854</span> <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>        ]</span><br><span class="line"> [<span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.52547275</span> <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.41428875</span></span><br><span class="line">  <span class="number">0.52547275</span> <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.52547275</span>]</span><br><span class="line"> [<span class="number">0.4472136</span>  <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.4472136</span>  <span class="number">0.</span></span><br><span class="line">  <span class="number">0.</span>         <span class="number">0.4472136</span>  <span class="number">0.</span>         <span class="number">0.4472136</span>  <span class="number">0.4472136</span>  <span class="number">0.</span>        ]</span><br><span class="line"> [<span class="number">0.</span>         <span class="number">0.6191303</span>  <span class="number">0.</span>         <span class="number">0.78528828</span> <span class="number">0.</span>         <span class="number">0.</span></span><br><span class="line">  <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>         <span class="number">0.</span>        ]]</span><br><span class="line">[<span class="string">'中国'</span>, <span class="string">'北京'</span>, <span class="string">'大厦'</span>, <span class="string">'天安门'</span>, <span class="string">'小明'</span>, <span class="string">'来到'</span>, <span class="string">'杭研'</span>, <span class="string">'毕业'</span>, <span class="string">'清华大学'</span>, <span class="string">'硕士'</span>, <span class="string">'科学院'</span>, <span class="string">'网易'</span>]</span><br><span class="line">来到 <span class="number">5</span></span><br><span class="line">北京 <span class="number">1</span></span><br><span class="line">清华大学 <span class="number">8</span></span><br><span class="line">网易 <span class="number">11</span></span><br><span class="line">杭研 <span class="number">6</span></span><br><span class="line">大厦 <span class="number">2</span></span><br><span class="line">小明 <span class="number">4</span></span><br><span class="line">硕士 <span class="number">9</span></span><br><span class="line">毕业 <span class="number">7</span></span><br><span class="line">中国 <span class="number">0</span></span><br><span class="line">科学院 <span class="number">10</span></span><br><span class="line">天安门 <span class="number">3</span></span><br><span class="line">---------------------- <span class="number">0</span> --------------------</span><br><span class="line">中国 <span class="number">0.0</span></span><br><span class="line">北京 <span class="number">0.5264054336099155</span></span><br><span class="line">大厦 <span class="number">0.0</span></span><br><span class="line">天安门 <span class="number">0.0</span></span><br><span class="line">小明 <span class="number">0.0</span></span><br><span class="line">来到 <span class="number">0.5264054336099155</span></span><br><span class="line">杭研 <span class="number">0.0</span></span><br><span class="line">毕业 <span class="number">0.0</span></span><br><span class="line">清华大学 <span class="number">0.6676785446095399</span></span><br><span class="line">硕士 <span class="number">0.0</span></span><br><span class="line">科学院 <span class="number">0.0</span></span><br><span class="line">网易 <span class="number">0.0</span></span><br><span class="line">---------------------- <span class="number">1</span> --------------------</span><br><span class="line">中国 <span class="number">0.0</span></span><br><span class="line">北京 <span class="number">0.0</span></span><br><span class="line">大厦 <span class="number">0.5254727492640658</span></span><br><span class="line">天安门 <span class="number">0.0</span></span><br><span class="line">小明 <span class="number">0.0</span></span><br><span class="line">来到 <span class="number">0.41428875116588965</span></span><br><span class="line">杭研 <span class="number">0.5254727492640658</span></span><br><span class="line">毕业 <span class="number">0.0</span></span><br><span class="line">清华大学 <span class="number">0.0</span></span><br><span class="line">硕士 <span class="number">0.0</span></span><br><span class="line">科学院 <span class="number">0.0</span></span><br><span class="line">网易 <span class="number">0.5254727492640658</span></span><br><span class="line">---------------------- <span class="number">2</span> --------------------</span><br><span class="line">中国 <span class="number">0.4472135954999579</span></span><br><span class="line">北京 <span class="number">0.0</span></span><br><span class="line">大厦 <span class="number">0.0</span></span><br><span class="line">天安门 <span class="number">0.0</span></span><br><span class="line">小明 <span class="number">0.4472135954999579</span></span><br><span class="line">来到 <span class="number">0.0</span></span><br><span class="line">杭研 <span class="number">0.0</span></span><br><span class="line">毕业 <span class="number">0.4472135954999579</span></span><br><span class="line">清华大学 <span class="number">0.0</span></span><br><span class="line">硕士 <span class="number">0.4472135954999579</span></span><br><span class="line">科学院 <span class="number">0.4472135954999579</span></span><br><span class="line">网易 <span class="number">0.0</span></span><br><span class="line">---------------------- <span class="number">3</span> --------------------</span><br><span class="line">中国 <span class="number">0.0</span></span><br><span class="line">北京 <span class="number">0.6191302964899972</span></span><br><span class="line">大厦 <span class="number">0.0</span></span><br><span class="line">天安门 <span class="number">0.7852882757103967</span></span><br><span class="line">小明 <span class="number">0.0</span></span><br><span class="line">来到 <span class="number">0.0</span></span><br><span class="line">杭研 <span class="number">0.0</span></span><br><span class="line">毕业 <span class="number">0.0</span></span><br><span class="line">清华大学 <span class="number">0.0</span></span><br><span class="line">硕士 <span class="number">0.0</span></span><br><span class="line">科学院 <span class="number">0.0</span></span><br><span class="line">网易 <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+</details>
+<ul>
+<li><strong>NLTK计算TF-IDF</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.text <span class="keyword">import</span> TextCollection</span><br><span class="line"></span><br><span class="line">corpus = [<span class="string">'I come to China to travel'</span>,</span><br><span class="line">          <span class="string">'This is a car polupar in China'</span>,</span><br><span class="line">          <span class="string">'I love tea and Apple'</span>,</span><br><span class="line">          <span class="string">'The work is to write some papers in science'</span>]</span><br><span class="line"></span><br><span class="line">corpus = TextCollection(corpus)</span><br><span class="line"><span class="comment"># 直接就能算出TF-IDF</span></span><br><span class="line">print(corpus.tf_idf(<span class="string">'China'</span>, <span class="string">'I come to China to travel'</span>))</span><br><span class="line"><span class="comment"># 0.027725887222397813</span></span><br></pre></td></tr></table></figure>
+<h2 id="nltk">NLTK</h2>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202009/817161-20200905175021602-2048815200.png" style="width:330px;height:200px"></p>
+<ul>
+<li><strong>示例</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line">sentence = <span class="string">"""At eight o'clock on Thursday morning</span></span><br><span class="line"><span class="string">Arthur didn't feel very good.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line">tokens = nltk.word_tokenize(sentence)</span><br><span class="line">print(tokens)</span><br><span class="line"><span class="comment"># ['At', 'eight', "o'clock", 'on', 'Thursday', 'morning', 'Arthur', 'did', "n't", 'feel', 'very', 'good', '.']</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 词性标注</span></span><br><span class="line">targed = nltk.pos_tag(tokens)</span><br><span class="line">print(targed[<span class="number">0</span>:<span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'NN'), ('on', 'IN'), ('Thursday', 'NNP'), ('morning', 'NN')]</span></span><br></pre></td></tr></table></figure>
+<h2 id="预料及词性标注">预料及词性标注</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 中文词性标注, jieba</span></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"></span><br><span class="line">words = pseg.cut(<span class="string">'我爱北京天安门'</span>)</span><br><span class="line"><span class="keyword">for</span> word, flag <span class="keyword">in</span> words:</span><br><span class="line">    print(word, flag)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 我 r</span></span><br><span class="line"><span class="comment"># 爱 v</span></span><br><span class="line"><span class="comment"># 北京 ns</span></span><br><span class="line"><span class="comment"># 天安门 ns</span></span><br></pre></td></tr></table></figure>
+<h1 id="检索类聊天机器人客服">检索类聊天机器人(客服)</h1>
+<h1 id="生成类聊天机器人娱乐">生成类聊天机器人(娱乐)</h1>
+<h1 id="pytorch基础">pytorch基础</h1>
+<h1 id="机器人发展方向与seqgan实战">机器人发展方向与seqGAN实战</h1>
+<h1 id="基于pytorch聊天机器人代码实战">基于pytorch聊天机器人代码实战</h1>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Douzi
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://douzujun.github.io/posts/53738.html" title="Pytorch-从零开发NLP聊天机器人">https://douzujun.github.io/posts/53738.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag"># 自然语言处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/56835.html" rel="prev" title="Coursera Deep Learning笔记 一步步实现神经网络">
+      <i class="fa fa-chevron-left"></i> Coursera Deep Learning笔记 一步步实现神经网络
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#聊天机器人综合介绍"><span class="nav-number">1.</span> <span class="nav-text">聊天机器人综合介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nlp基础"><span class="nav-number">2.</span> <span class="nav-text">NLP基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分词"><span class="nav-number">2.1.</span> <span class="nav-text">分词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-idf"><span class="nav-number">2.2.</span> <span class="nav-text">TF-IDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nltk"><span class="nav-number">2.3.</span> <span class="nav-text">NLTK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预料及词性标注"><span class="nav-number">2.4.</span> <span class="nav-text">预料及词性标注</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#检索类聊天机器人客服"><span class="nav-number">3.</span> <span class="nav-text">检索类聊天机器人(客服)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成类聊天机器人娱乐"><span class="nav-number">4.</span> <span class="nav-text">生成类聊天机器人(娱乐)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pytorch基础"><span class="nav-number">5.</span> <span class="nav-text">pytorch基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#机器人发展方向与seqgan实战"><span class="nav-number">6.</span> <span class="nav-text">机器人发展方向与seqGAN实战</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于pytorch聊天机器人代码实战"><span class="nav-number">7.</span> <span class="nav-text">基于pytorch聊天机器人代码实战</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Douzi"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Douzi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/douzujun" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;douzujun" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jdouzi@qq.com" title="E-Mail → mailto:jdouzi@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/douzujun/" title="cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;douzujun&#x2F;" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>cnblogs</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Douzi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">82k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:14</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

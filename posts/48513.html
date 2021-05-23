@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"douzujun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":280,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深度学习概述 特征工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习">
+<meta property="og:url" content="https://douzujun.github.io/posts/48513.html">
+<meta property="og:site_name" content="Douzi&#39;s Blog">
+<meta property="og:description" content="深度学习概述 特征工程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195431320-1095966772.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195404449-620553540.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195908274-1184672399.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531201335444-1594057517.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531205502620-1463495587.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531210645121-2064840159.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531211413656-595539233.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531213050368-402591670.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531214407794-638106591.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531235150870-1333469783.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601004256480-1605353804.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601005651528-980151809.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601010728072-509837196.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012244248-36051544.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012534423-1615403709.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012749910-1908185568.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601114310559-692506753.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601121532421-1050468040.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601123659686-988076227.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171156733-1488333849.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171527392-1518498052.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171818179-1069784518.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171855073-687331428.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171936293-151456355.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601173506869-1775838890.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230330336-699451350.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230607507-173049950.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230725826-442270436.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601232318129-1897561607.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602101344864-1314099615.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602101536283-1030041134.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602103235050-558217719.png">
+<meta property="og:image" content="https://douzujun.github.io/posts/48513/%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602104514742-1750768267.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602111122592-822522628.png">
+<meta property="og:image" content="https://douzujun.github.io/posts/48513/%E6%A0%87%E5%87%86%E6%B3%95.png">
+<meta property="og:image" content="https://douzujun.github.io/posts/48513/%E5%9D%87%E6%96%B9%E5%B7%AE.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602143425053-1431616999.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602145133883-90169868.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602145341213-582027351.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602150326253-1586772457.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602150942838-1826314432.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602170950118-199929201.png">
+<meta property="article:published_time" content="2020-05-31T11:40:04.000Z">
+<meta property="article:modified_time" content="2020-06-03T04:10:40.370Z">
+<meta property="article:author" content="Douzi">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195431320-1095966772.png">
+
+<link rel="canonical" href="https://douzujun.github.io/posts/48513.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深度学习 | Douzi's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3b62b9094ecc903a483628b8bef2545e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Douzi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://douzujun.github.io/posts/48513.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Douzi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Douzi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-31 19:40:04" itemprop="dateCreated datePublished" datetime="2020-05-31T19:40:04+08:00">2020-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-03 12:10:40" itemprop="dateModified" datetime="2020-06-03T12:10:40+08:00">2020-06-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>14k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>深度学习概述</li>
+<li>特征工程</li>
+</ul>
+<a id="more"></a>
+<h1 id="第一讲-深度学习概述">第一讲 深度学习概述</h1>
+<h2 id="深度学习的引出">深度学习的引出</h2>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195431320-1095966772.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195404449-620553540.png"></p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>通过 <strong>组合低层特征</strong>，形成了更加抽象的 <strong>高层特征</strong>。</li>
+<li>表达式中的 u，w参数需要在训练中通过 <strong>反向传播多次迭代调整</strong>，使得整体的 <strong>分类误差最小</strong>。</li>
+<li>深度学习网络往往 <strong>包含多个中间层（隐藏层）</strong>，且网络结构要更复杂一些。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531195908274-1184672399.png"></p>
+<h2 id="数据集及其拆分">数据集及其拆分</h2>
+<blockquote>
+<ul>
+<li><p>Iris（鸢尾花）数据集</p></li>
+<li><p>分类特征：花萼和花瓣的宽度和长度</p></li>
+</ul>
+</blockquote>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531201335444-1594057517.png"></p>
+<blockquote>
+<p>数据集在数学上通常表示为 $ {(x_1,y_1),(x_2,y_2),...,(x_i,y_i),...,(x_m,y_m)}​$</p>
+<ul>
+<li>其中 <span class="math inline">\(x_i\)</span> 为样本特征。由于样本（即一行）一般有多个特征，因而 $x_i = {x_i^1, x_i^2,..., x_i^n} $</li>
+<li>而 <span class="math inline">\(y_i\)</span> 表示 <strong>样本i</strong> 的 <strong>类别标签</strong>。</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>类别标签的ground truth 与 gold standard</strong></li>
+</ul>
+<blockquote>
+<p>ground truth：翻译为地面实况。机器学习领域一般用于表示真实值、标准答案等，表示通过直接观察收集到的真实结果。</p>
+<p>gold standard：金标准，医学上一般指诊断疾病公认的最可靠的方法。</p>
+<p>机器学习领域更倾向于使用ground truth，如果用gold standard则表示可以很好地代表ground truth。</p>
+</blockquote>
+<h3 id="数据集与有监督学习">数据集与有监督学习</h3>
+<p>有监督学习中数据通常分成 <strong>训练集</strong>、<strong>测试集</strong> 两部分。</p>
+<ul>
+<li>训练集( training set)：用来<strong>训练模型</strong>，即被用来 <strong>学习</strong> 得到系统的 <strong>参数取值</strong>。</li>
+<li>测试集( testing set)：用于最终报告模型的<strong>评价结果</strong>，因此在训练阶段测试集中的样本应该是不可见的。</li>
+<li>对<strong>训练集</strong>做进一步划分为 <strong>训练集、验证集 validation set</strong>。
+<ul>
+<li>验证集：与测试集类似，也是用于评估模型的性能。</li>
+<li><strong>区别</strong>：是 验证集 主要 用于 模型选择 和 调整超参数，因而一般不用于报告最终结果。</li>
+</ul></li>
+</ul>
+<h3 id="训练集测试集拆分">训练集测试集拆分</h3>
+<ul>
+<li>留出法( Hold-out Method)数据拆分步骤</li>
+</ul>
+<p>​ 1.将数据随机分为两组，一组做为<strong>训练集</strong>，一组做为<strong>测试集</strong></p>
+<p>​ 2.利用训练集训练分类器,然后利用测试集评估模型，记录最后的分类准确率为此分类器的性能指标</p>
+<ul>
+<li><strong><u>K折交叉验证</u> </strong></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531205502620-1463495587.png"></p>
+<ul>
+<li><p>分层抽样策略（Stratified k-fold）</p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531210645121-2064840159.png"></p></li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>过程：</strong>
+<ul>
+<li>将数据集划分成k份，特点在于，划分的k份中 ——</li>
+<li>每一份内各个类别数据的比例 和 原始数据集中各个类别的比例 <strong>相同</strong>。</li>
+</ul></li>
+</ul>
+</blockquote>
+<h3 id="k折交叉验证的应用-用网格搜索来调超参数">K折交叉验证的应用-用网格搜索来调超参数</h3>
+<ul>
+<li>什么是超参数？
+<ul>
+<li>指在学习过程之前 需要设置其值的一些变量</li>
+<li>而不是通过训练得到的参数数据。如深度学习中的学习速率（learning rate）等就是超参数。</li>
+</ul></li>
+<li><p>什么是网格搜索?</p></li>
+<li><ul>
+<li>假设模型中有2个超参数：A和B。</li>
+<li>A的可能取值为 <span class="math inline">\({a1,a2,a3}\)</span>；</li>
+<li>B的可能取值为连续的，如在区间[0-1]。由于B值为连续，通常进行离散化，如变为 {0, 0.25, 0.5, 0.75, 1.0}</li>
+<li>如果使用网格搜索，就是尝试各种可能的 (A,B)对值，找到 能使的模型取得最高性能的 (A,B)值对。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531211413656-595539233.png"></p></li>
+<li><blockquote>
+<p>网格搜索与K折交叉验证结合调整超参数的具体步骤:</p>
+<ol type="1">
+<li>确定评价指标（准确率等）</li>
+<li>对于超参数取值的每种组合,在 <u>训练集</u> 上使用 <u>交叉验证的方法</u> 求得 其 <strong>K次评价的性能均值</strong></li>
+<li>最后，比较哪种超参数取值组合的性能最好，从而得到最优超参数的取值组合。</li>
+</ol>
+</blockquote></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531213050368-402591670.png"></p>
+<h2 id="分类及其性能度量">分类及其性能度量</h2>
+<h3 id="分类">分类</h3>
+<ul>
+<li>分类问题是有监督学习的一个核心问题。分类解决的是要预测样本属于哪个或者哪些预定义的类别。此时输出变量通常取有限个离散值。</li>
+<li><p>分类的机器学习的两大阶段</p>
+<ol type="1">
+<li>从训练数据中学习得到一个 分类决策函数 或 分类模型，称为 分类器( classifier)；</li>
+<li>利用学习得到的分类器对新的输入样本进行类别预测。</li>
+</ol></li>
+<li><strong>两类分类问题 与 多类分类问题：</strong>
+<ul>
+<li>多类分类问题也可以转化为两类分类问题解决，如采用 一对其余（One-Vs-Rest） 的方法：</li>
+<li>将其中一个类标记为正类，然后将剩余的其它类都标记成负类。</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531214407794-638106591.png"></p>
+<h3 id="分类性能度量"><strong>分类性能度量</strong></h3>
+<ul>
+<li>假设只有两类样本，即 <u>正例( <strong>p</strong>ositive)</u> 和 <u>负例 (<strong>n</strong>egative)</u>。</li>
+<li>通常以关注的类为正类，其他类为负类。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202005/817161-20200531235150870-1333469783.png"></p>
+<ul>
+<li>表中AB模式：
+<ul>
+<li>第二个符号表示：预测的类别 ( <strong>P</strong>ositive or <strong>N</strong>egative )</li>
+<li>第一个表示：预测结果 ( <strong>T</strong>rue or <strong>F</strong>alse)</li>
+</ul></li>
+<li><p><strong>分类准确率( accuracy)</strong>：分类器正确分类的样本数与总样本数之比：</p>
+<ul>
+<li><span class="math inline">\(accuracy = {\frac{TP+TN}{P+N} }\)</span></li>
+</ul></li>
+<li><strong><u>精确率( precision)</u></strong>：反映了模型 <strong>判定的正例中真正正例的比重</strong>。在垃圾短信分类器中，是指预测出的垃圾短信中真正垃圾短信的比例。
+<ul>
+<li><span class="math inline">\(precison = \frac{TP}{TP+FP}\)</span></li>
+</ul></li>
+<li><u><strong>召回率{ recall)</strong></u>：反映了 <strong>总正例</strong> 中被模型 <strong>正确判定正例</strong> 的比重。
+<ul>
+<li>医学领域也叫做灵敏度( sensitivity)。在垃圾短信分类器中,指所有真的垃圾短信被分类器正确找出来的比例。</li>
+<li><span class="math inline">\(recall = \frac{TP}{P}\)</span></li>
+</ul></li>
+<li><p><u><strong>P-R 曲线</strong></u></p></li>
+</ul>
+<p><strong><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601004256480-1605353804.png"></strong></p>
+<p><strong>Area</strong>( Area Under Curve，或者简称AUC)：</p>
+<ul>
+<li>Area的定义（p-r曲线下的面积）：
+<ul>
+<li><span class="math inline">\(Area = \int_0^1p(r)dr​\)</span></li>
+</ul></li>
+<li>有助于弥补P、R的单点值局限性，可以 <u>反映全局性能</u>。</li>
+</ul>
+<p><strong>如何绘制P-R曲线：</strong></p>
+<ul>
+<li><p>要得到PR曲线，需要一系列 Precision和Recall的值。这些系列值是通过阈值来形成的。对于每个测试样本，分类器一般都会给了“Score”值，表示该样本多大概率上属于正例。</p></li>
+<li><p><strong>步骤：</strong></p></li>
+</ul>
+<ol type="1">
+<li>从高到低将“ Score&quot;值排序，并依此作为阈值 threshold；</li>
+<li>对于每个阈值，“ Score&quot;值大于或等于这个 threshold的测试样本被认为正例，其它为负例。从而形成一组预测数据。（每个样本设置不同阈值，算出precison和recall，从而形成一组数据）</li>
+</ol>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601005651528-980151809.png"></p>
+<ul>
+<li><strong><u>F值</u></strong>
+<ul>
+<li>F 值 (<span class="math inline">\(F_\beta-score​\)</span>) 是 精确率 和 召回率 的 调和平均：
+<ul>
+<li><span class="math inline">\(F_\beta-score=\frac{(1+\beta^2)*precison*recall}{(\beta^2*precision+recall)}\)</span></li>
+<li><strong><span class="math inline">\(\beta一般大于0。当\beta=1时，退化为 F1\)</span></strong> (同等重要)</li>
+<li><span class="math inline">\(F_1\)</span> 是最常用的 评价指标，即 表示二者同等重要</li>
+</ul></li>
+</ul></li>
+<li><u><strong>ROC</strong>（受试者工作特征曲线，receiver operating characteristic curve）</u>
+<ul>
+<li>描绘了分类器在 <span class="math inline">\(tp rate\)</span> （真正正例占总正例的比率，反映<strong>命中概率</strong>，纵轴) 和</li>
+<li><span class="math inline">\(fp rate\)</span>（错误的正例占反例的比率，反映误诊率、假阳性率、虚惊概率，橫轴)间的trade-off。</li>
+<li>ROC曲线绘制和P-R曲线类似。</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601010728072-509837196.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012244248-36051544.png"></p>
+<ul>
+<li><u><strong>ROC- AUC ( Area Under Curve)定义为ROC曲线下的面积</strong></u>
+<ul>
+<li>AUC值提供了分类器的一个整体数值。通常AUC越大,分类器更好。</li>
+<li>取值范围为[0,1]</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012534423-1615403709.png"></p>
+<ul>
+<li>分类性能可视化
+<ul>
+<li>混淆矩阵的可视化：可用热图（heatmap）直观展现类别的混淆情况</li>
+<li>分类报告：显示每个类的分类性能，包括每个类标签的精确率、召回率、F1值等。</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601012749910-1908185568.png"></p>
+<h2 id="回归问题及其性能度量">回归问题及其性能度量</h2>
+<h3 id="回归分析-regression-analysis">回归分析( regression analysis)</h3>
+<blockquote>
+<p>回归分析( regression analysis)：</p>
+<ul>
+<li>是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法</li>
+<li>和分类问题不同：
+<ul>
+<li><strong>回归</strong> 通常输出为 <u>一个实数数值。</u></li>
+<li><strong>分类</strong> 通常输出为 <u>若干指定的类别标签。</u></li>
+</ul></li>
+</ul>
+</blockquote>
+<h3 id="常用的回归性能度量方法">常用的回归性能度量方法</h3>
+<ul>
+<li><strong><u>平均绝对误差 MAE</u> (mean_absolute_error)</strong>
+<ul>
+<li>MAE ( Mean absolute error) 是 绝对误差损失( absolute error loss)的期望值。　　</li>
+<li>如果 <span class="math inline">\(\hat{y_i}​\)</span> 是 第 <span class="math inline">\(i​\)</span> 个样本的 预测值，<span class="math inline">\(y_i​\)</span>是相应的真实值，那么在 <span class="math inline">\(n_{samples}​\)</span>个测试样本上的 <u>平均绝对误差</u> (MAE) 的定义如下：
+<ul>
+<li><strong><span class="math inline">\(MAE(y, \hat{y}) = \frac{1}{n_{sample}}\sum_{i=0}^{n_{samplee}-1}|y_i - \hat{y_i}|​\)</span></strong></li>
+</ul></li>
+</ul></li>
+<li><strong><u>均方误差 MSE</u> (mean_squared_error) 及 均方根差 RMSE</strong>
+<ul>
+<li><strong>MSE( Mean squared error)，</strong>该指标对应于 平方误差损失( squared errorloss)的期望值。</li>
+<li>如果 <span class="math inline">\(\hat{y_i}​\)</span> 是 第 <span class="math inline">\(i​\)</span> 个样本的 预测值，<span class="math inline">\(y_i​\)</span>是相应的真实值，那么在 <span class="math inline">\(n_samples​\)</span>个测试样本上的 <u>均方差</u> 的定义如下：
+<ul>
+<li><strong><span class="math inline">\(MSE(y, \hat{y}) = \frac{1}{n_{sample}}\sum_{i=0}^{n_{samplee}-1}|y_i - \hat{y_i}|^2\)</span></strong></li>
+</ul></li>
+<li>均方根差RMSE：是MSE的平方根</li>
+</ul></li>
+<li><u><strong>logistic回归损失（二类）</strong></u>
+<ul>
+<li><p><strong>简称 Log loss，或交叉熵损失( cross-entropy loss)</strong></p>
+<ul>
+<li>常用于评价 逻辑回归LR 和 神经网络</li>
+</ul></li>
+<li><p>对于二类分类问题：</p>
+<ol type="1">
+<li><p>假设某样本的真实标签为 y (取值为0或1)，概率估计为 <span class="math inline">\(p = pr(y = 1)\)</span></p></li>
+<li><p>每个样本的 <u>log loss</u> 是对 分类器 给定 <u>真实标签</u> 的 <u>负log似然估计(negative log-likelihood)</u></p>
+<ul>
+<li><span class="math inline">\(L_{log}(y, p) = -log(pr(y|p)) = -(ylog(p) + (1- y)log(1-p))​\)</span></li>
+</ul></li>
+<li><p>实例：</p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601114310559-692506753.png"></p></li>
+</ol></li>
+</ul></li>
+<li><p><u><strong>logistic回归损失（多类）</strong></u></p>
+<ul>
+<li><p>对于多类问题( multiclass problem)，可将样本的真实标签( true label) 编码成 1-of-K( K为类别总数)的 <strong>二元指示矩阵Y</strong>：</p></li>
+<li><p><strong>转换举例：假设 K = 3，即三个类</strong></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601121532421-1050468040.png"></p></li>
+<li><p>假设模型对测试样本的概率估计结果为P，则在测试集（假设测试样本总数为N）上的 <u>交叉熵损失</u> 表示如下：</p>
+<ul>
+<li><strong><span class="math inline">\(L_{log}(Y, P) = -\frac{1}{N}\sum_{k=0}^{k-1}y_{i, k}logp_{i, k}\)</span></strong></li>
+<li><strong><span class="math inline">\(y_{i,k}\)</span></strong> ：表示第 <span class="math inline">\(i\)</span> 个样本的第 <span class="math inline">\(k\)</span> 个标签的 真实值</li>
+<li>即ground truth，具体含义为第 <span class="math inline">\(i\)</span> 个样本，是否属于第 <span class="math inline">\(k\)</span> 个标签，注意由于表示为 “1-of-K模式，因此每个样本只有其中一个标签值为1，其余均为0。</li>
+<li><strong><span class="math inline">\(p_{i,k}\)</span></strong> ：表示模型对第 <span class="math inline">\(i\)</span> 个样本的 第 <span class="math inline">\(k​\)</span> 个标签的 预测值。</li>
+</ul></li>
+<li><p><strong>举例：6个样本，三个类</strong></p></li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601123659686-988076227.png"></p>
+<ul>
+<li>回归评价的真实标签（即ground truth）如何获得？
+<ul>
+<li>MAE，RMSE(MSE) 常用于评分预测评价，eg 很多提供推荐服务的网站都有一个让用户给物品打分的功能预测用广对物品评分的行为称为 <u>评分预测</u>。</li>
+</ul></li>
+</ul>
+<h2 id="一致性的评价方法">一致性的评价方法</h2>
+<ul>
+<li><strong>一致性评价：</strong>是指对两个或多个相关的变量进行分析，从而衡量其相关性的密切程度。</li>
+<li><strong>问题举例：</strong></li>
+</ul>
+<blockquote>
+<ul>
+<li>假设两评委( rater)对5部电影的评分如下，则二者的一致如何?</li>
+<li>rater1=[0.5,1.6,25,25,24]</li>
+<li>rater2=[1.5,26,35,3.5,34]</li>
+</ul>
+</blockquote>
+<ul>
+<li><u><strong>皮尔森相关系数法</strong></u></li>
+</ul>
+<blockquote>
+<p>应用背景：</p>
+<ul>
+<li>用来衡量两个用户之间兴趣的 一致性</li>
+<li>用来衡量 预测值与真实值 之间的 相关性</li>
+<li>既适用于离散的、也适用于连续变量的 相关分析</li>
+</ul>
+<p>X 和 Y 之间的皮尔森相关系数计算公式：</p>
+<ul>
+<li><strong><span class="math inline">\(\rho_{X,Y} = \frac{cov(X,Y)}{\sigma_X\sigma_Y} = \frac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}\)</span></strong></li>
+<li>其中，<span class="math inline">\(cov(X,Y)\)</span> 表示X和Y之间的 协方差( Covariance)</li>
+<li><span class="math inline">\(\sigma_X\)</span> 是X的均方差，<span class="math inline">\(\mu_X\)</span> 是 X 的均值，E表示数学期望</li>
+<li>取值区间为[-1,1]。-1：完全的负相关,+1：表示完全的正相关,0：没有线性相关。</li>
+</ul>
+</blockquote>
+<ul>
+<li><u><strong>Cohen's kappa相关系数</strong></u></li>
+</ul>
+<blockquote>
+<ul>
+<li>与 皮尔森相关系数的区别：Cohens kappa相关系数，通常用于<strong>离散的分类</strong>的一致性评价。</li>
+<li><p>其通常被认为比两人之间的简单一致百分比更强壮，因为 Cohen's kappa考虑到了:二人之间的随机一致的可能性</p></li>
+<li>如果评价者多于2人时，可以考虑使用 Fleiss' kappa</li>
+<li><p><strong>Cohen's kappa的计算方法：</strong></p></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171156733-1488333849.png"></p>
+<ul>
+<li>kappa score是一个介于-1到+1之间的数。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171527392-1518498052.png"></p>
+</blockquote>
+<ul>
+<li><u><strong>Fleiss' Kappa</strong></u></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171818179-1069784518.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171855073-687331428.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601171936293-151456355.png"></p>
+<h2 id="实例绘制pr曲线">实例：绘制PR曲线</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#利用鸢尾花数据集绘制P-R曲线</span></span><br><span class="line">print(__doc__)      <span class="comment">#打印注释</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm, datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_recall_curve</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> average_precision_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> label_binarize</span><br><span class="line"><span class="keyword">from</span> sklearn.multiclass <span class="keyword">import</span> OneVsRestClassifier  <span class="comment">#一对其余（每次将一个类作为正类，剩下的类作为负类）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># from sklearn.cross_validation import train_test_split  #适用于anaconda 3.6及以前版本</span></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split     <span class="comment">#适用于anaconda 3.7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#以iris数据为例，画出P-R曲线</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X = iris.data    <span class="comment">#150*4</span></span><br><span class="line">y = iris.target  <span class="comment">#150*1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 标签二值化,将三个类转为001, 010, 100的格式.因为这是个多类分类问题，后面将要采用</span></span><br><span class="line"><span class="comment">#OneVsRestClassifier策略转为二类分类问题</span></span><br><span class="line">y = label_binarize(y, classes=[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])    <span class="comment">#将150*1转化成150*3</span></span><br><span class="line">n_classes = y.shape[<span class="number">1</span>]                      <span class="comment">#列的个数，等于3</span></span><br><span class="line"><span class="keyword">print</span> (y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加了800维的噪声特征</span></span><br><span class="line">random_state = np.random.RandomState(<span class="number">0</span>)</span><br><span class="line">n_samples, n_features = X.shape</span><br><span class="line"></span><br><span class="line">X = np.c_[X, random_state.randn(n_samples, <span class="number">200</span> * n_features)]   <span class="comment">#行不变，只增加了列，150*804</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练集和测试集拆分，比例为0.5</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">.5</span>, random_state=random_state) <span class="comment">#随机数，填0或不填，每次都会不一样</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一对其余，转换成两类，构建新的分类器</span></span><br><span class="line">classifier = OneVsRestClassifier(svm.SVC(kernel=<span class="string">'linear'</span>, probability=<span class="literal">True</span>, random_state=random_state))</span><br><span class="line"><span class="comment">#训练集送给fit函数进行拟合训练，训练完后将测试集的样本特征注入，得到测试集中每个样本预测的分数</span></span><br><span class="line">y_score = classifier.fit(X_train, y_train).decision_function(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Compute Precision-Recall and plot curve</span></span><br><span class="line"><span class="comment">#下面的下划线是返回的阈值。作为一个名称：此时“_”作为临时性的名称使用。</span></span><br><span class="line"><span class="comment">#表示分配了一个特定的名称，但是并不会在后面再次用到该名称。</span></span><br><span class="line">precision = dict()</span><br><span class="line">recall = dict()</span><br><span class="line">average_precision = dict()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_classes):</span><br><span class="line">    <span class="comment">#对于每一类，计算精确率和召回率的序列（:表示所有行，i表示第i列）</span></span><br><span class="line">    precision[i], recall[i], _ = precision_recall_curve(y_test[:, i],  y_score[:, i])</span><br><span class="line">    average_precision[i] = average_precision_score(y_test[:, i], y_score[:, i])<span class="comment">#切片，第i个类的分类结果性能</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Compute micro-average curve and area. ravel()将多维数组降为一维</span></span><br><span class="line">precision[<span class="string">"micro"</span>], recall[<span class="string">"micro"</span>], _ = precision_recall_curve(y_test.ravel(),  y_score.ravel())</span><br><span class="line">average_precision[<span class="string">"micro"</span>] = average_precision_score(y_test, y_score, average=<span class="string">"micro"</span>) <span class="comment">#This score corresponds to the area under the precision-recall curve.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot Precision-Recall curve for each class</span></span><br><span class="line">plt.clf()<span class="comment">#clf 函数用于清除当前图像窗口</span></span><br><span class="line">plt.plot(recall[<span class="string">"micro"</span>], precision[<span class="string">"micro"</span>],</span><br><span class="line">         label=<span class="string">'micro-average Precision-recall curve (area = &#123;0:0.2f&#125;)'</span>.format(average_precision[<span class="string">"micro"</span>]))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_classes):</span><br><span class="line">    plt.plot(recall[i], precision[i],</span><br><span class="line">             label=<span class="string">'Precision-recall curve of class &#123;0&#125; (area = &#123;1:0.2f&#125;)'</span>.format(i, average_precision[i]))</span><br><span class="line"></span><br><span class="line">plt.xlim([<span class="number">0.0</span>, <span class="number">1.0</span>])</span><br><span class="line">plt.ylim([<span class="number">0.0</span>, <span class="number">1.05</span>]) <span class="comment">#xlim、ylim：分别设置X、Y轴的显示范围。</span></span><br><span class="line">plt.xlabel(<span class="string">'Recall'</span>, fontsize=<span class="number">16</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Precision'</span>,fontsize=<span class="number">16</span>)</span><br><span class="line">plt.title(<span class="string">'Extension of Precision-Recall curve to multi-class'</span>,fontsize=<span class="number">16</span>)</span><br><span class="line">plt.legend(loc=<span class="string">"lower right"</span>)<span class="comment">#legend 是用于设置图例的函数</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601173506869-1775838890.png" style="zoom:80%"></p>
+<h1 id="第二讲-特征工程">第二讲 特征工程</h1>
+<h2 id="特征工程">特征工程</h2>
+<blockquote>
+<p>什么是特征工程？</p>
+<p>引自知乎:“数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已。</p>
+<p>深度学习也要用到特征，需要对输入的特征进行组合变换等处理。</p>
+</blockquote>
+<h3 id="自动分词">自动分词</h3>
+<ul>
+<li>自动分词：就是将用自然语言书写的文章、句段经计算处理后，以词为单位 给以输出，为后续加工处理提供先决条件。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230330336-699451350.png"></p>
+<ul>
+<li><p><strong>词形规范化</strong> 的两种形式：词根提取与词形还原</p>
+<ul>
+<li><u>词根提取( stemming)</u>：是抽取词的词干或词根形式（不一定能够表达完整语义）。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230607507-173049950.png"></p>
+<ul>
+<li><u>词形还原( lemmatization)</u>：是把词汇还原为一般形式（能表达完整语义）。如将“ drove&quot;处理为&quot;drive&quot;。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601230725826-442270436.png"></p></li>
+</ul>
+<h3 id="词性标注"><strong>词性标注</strong></h3>
+<ul>
+<li><u>词性标注</u> (part-of- speech tagging)：
+<ul>
+<li>是指为分词结果中的 每个单词 标注一个正确的词性的程序</li>
+<li>也即确定每个词是 <u>名词、动词、形容词</u> 或者 其他词性的过程。</li>
+</ul></li>
+</ul>
+<h3 id="句法分析"><strong>句法分析</strong></h3>
+<blockquote>
+<ul>
+<li>句法分析( Syntactic analysis)：</li>
+<li>其基本任务是确定句子的 句法结构 或者 句子中词汇之间的 依存关系。</li>
+</ul>
+</blockquote>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200601232318129-1897561607.png"></p>
+<h3 id="自然语言处理工具"><strong>自然语言处理工具</strong></h3>
+<ul>
+<li><strong><u>NLTK</u></strong></li>
+</ul>
+<blockquote>
+<p>Natural Language Toolkit（自然语言处理工具包）是在NLP领域中最常用的一个 Python库。</p>
+<p>提供了很多<strong>文本处理</strong>的功能:</p>
+<ol type="1">
+<li>Tokenization（词语切分，单词化处理）</li>
+<li>Stemming（词干提取）</li>
+<li>Tagging（标记，如词性标注）</li>
+<li>Parsing（句法分析）此外</li>
+</ol>
+<p>还提供了50多种语料和词汇资源的接口，如 Word Net等。</p>
+</blockquote>
+<ul>
+<li>Text Processing API</li>
+</ul>
+<blockquote>
+<p>支持如下功能：</p>
+<ol type="1">
+<li>词根提取与词形还原( Stemming&amp; Lemmatization)</li>
+<li>情感分析( Sentiment Analysis)</li>
+<li>词性标注和语块抽取( Tagging and chunk Extraction)</li>
+<li>短语抽取和命名实体识别( Phrase Extraction&amp; Named Entity Recognition)</li>
+</ol>
+<p>与NLTK不同，Text Processing API的使用无需安装程序，只需将输入的文本信息通过http post方式联网传递给该网络接口即可。</p>
+</blockquote>
+<ul>
+<li>TextBlob工具</li>
+<li><strong><u>中文处理工具jieba</u></strong></li>
+</ul>
+<blockquote>
+<p><strong>功能：</strong></p>
+<ul>
+<li>分词（包括并行分词、支持自定义词典）</li>
+<li>词性标注</li>
+<li>关键词提取</li>
+</ul>
+</blockquote>
+<h2 id="向量空间模型及文本相似度计算">向量空间模型及文本相似度计算</h2>
+<h3 id="文档的向量化表示bow假设和vsm模型"><strong>文档的向量化表示：BOW假设和VSM模型</strong></h3>
+<blockquote>
+<p>为了便于计算文档之间的相似度，需把 <strong>文档转成统一空间的向量</strong></p>
+<ul>
+<li><strong>BOW(bag- of-words model)</strong>：为了计算文档之间的相似度，假设可以忽略文档内的单词顺序和语法、句法等要素，将其仅仅看作是若干个词汇的集合。</li>
+<li><strong>VSM( Vector space model)</strong>：即向量空间模型。其是指在BOW词袋模型假设下，将每个文档表示成同一向量空间的向量。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602101344864-1314099615.png"></p>
+<ul>
+<li>举例：</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602101536283-1030041134.png"></p>
+</blockquote>
+<h3 id="停用词">停用词</h3>
+<blockquote>
+<p>英文名称： Stop words</p>
+<ul>
+<li>停用词通常是非常常见且实际意义有限的词, 如英文中“the&quot;,“a&quot;, &quot;of&quot;,“an”等;中文中“的”、“是”、“而且”等。几乎可能出现在所有场合，因而对某些应用如信息检索、文本分类等区分度不大。</li>
+<li>在信息检索等应用中，这些词在构建向量空间时通常会被过滤掉。因此这些词也被称为停用词。</li>
+<li>Tip：但在某些应用如短语搜索 phrase search中，停用词可能是重要的构成部分，因此要避免进行停用词过滤。</li>
+</ul>
+</blockquote>
+<h3 id="n-gram模型"><strong>N-gram模型</strong></h3>
+<blockquote>
+<ul>
+<li>N-gram：通常是指 一段 文本或语音 中 <u>连续N个项目(item)</u> 的序列。项目(item)可以是单词、字母、碱基对等。</li>
+<li>N=1 称为 uni-gram，N=2 称为 bi-gram，N=3 称为 tri-gram，以此类推。</li>
+<li>举例：对于文本 'And I also like to eat apple'
+<ul>
+<li><strong>Uni-gram：</strong> And, I, also, like, to, eat, apple</li>
+<li><strong>Bi-gram</strong>：And l, I also, also like, like to, to eat, eat apple</li>
+<li><strong>Tri-gram</strong>：And I also, I also like, also like to, like to eat, to eat apple</li>
+</ul></li>
+<li>20世纪80年代，N-gram被广泛地应用在 <u>拼写检查、输入法</u> 等应用中，90年代以后，N-gram得到新的应用，如 <strong>自动分类信息检索</strong> 等。即将 连续的若干词作为VSM中的维度，用于表示文档。</li>
+</ul>
+</blockquote>
+<h3 id="文档之间的欧式距离"><strong>文档之间的欧式距离</strong></h3>
+<blockquote>
+<ul>
+<li>欧氏距离( euclidean metric)是一个通常采用的距离定义，指在n维空间中两个点之间的真实距离。</li>
+<li>公式：<span class="math inline">\(d_{12} = \sqrt{\sum_{k=1}^n (x_{1k} - x_{2k})^2}​\)</span></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602103235050-558217719.png"></p>
+</blockquote>
+<h3 id="文档之间的余弦相似度"><strong>文档之间的余弦相似度</strong></h3>
+<blockquote>
+<ul>
+<li>通过计算 两个向量的夹角余弦值 来评估他们的相似度。余弦值越接近1，就表明夹角越接近0度，也就是两个向量越相似。</li>
+<li><img src="/posts/48513/余弦相似度.png" title="fig:" alt="余弦相似度"></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602104514742-1750768267.png"></p>
+</blockquote>
+<h3 id="ti-idf词条权重计算">Ti-idf词条权重计算</h3>
+<blockquote>
+<ul>
+<li>背景：<strong>特征向量</strong> 里某些高频词在文集内其他文档里面也经常出现。它往往太普遍，对区分文档起的作用不大。</li>
+<li>例如：
+<ul>
+<li>D1: ' Jobs was the chairman of <strong>Apple</strong> Inc.',</li>
+<li>D2: 'I like to use <strong>apple</strong> computer',</li>
+</ul></li>
+<li>这两个文档都是关于苹果电脑的，则词条 apple对分类意义不大。因此 <strong>有必要抑制</strong> 那些 在很多文档中都出现了的词条的权重。</li>
+<li>在 <span class="math inline">\(tf-idf\)</span> 模式下，词条t 在文档d中的权重计算为 <span class="math inline">\(w(t)=tf(t, d) * idf(t)\)</span>。
+<ul>
+<li><span class="math inline">\(tf(t,d)​\)</span>：表示为 词条t 在 文档d 中的出现频率
+<ul>
+<li>通过统计得到</li>
+</ul></li>
+<li><span class="math inline">\(idf(t)\)</span> ：表示与包含词条t的文档数目成反比 (inverse document frequency)
+<ul>
+<li><span class="math inline">\(idf(t) = (log\frac{n_d}{1+df(t)} + 1)​\)</span></li>
+<li><span class="math inline">\(n_d​\)</span> ：表示文档总数，<span class="math inline">\(df(t)​\)</span> ：表示包含该词条 t 的文档数</li>
+<li>(optional) 数据平滑问题：为了防止分母 <span class="math inline">\(df(t)\)</span> 为零：</li>
+<li><span class="math inline">\(idf(t) = (log\frac{1+n_d}{1+df(t)} + 1)​\)</span></li>
+</ul></li>
+</ul></li>
+<li><span class="math inline">\(tf-idf​\)</span> 词条权重计算 举例：</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602111122592-822522628.png"></p>
+</blockquote>
+<h2 id="特征处理特征缩放选择及降维">特征处理(特征缩放、选择及降维)</h2>
+<h3 id="特征值的缩放">特征值的缩放</h3>
+<p>特征值缩放( Feature scaler)也可以称为 <strong>无量纲处理</strong>。主要是对每个列，即 同一特征维度的数值 进行规范化处理。</p>
+<p>应用背景：</p>
+<ul>
+<li>不同特征(列)可能不属于同一量纲，<strong>即特征的规格不一样</strong>。例如，假设特征向量由两个解释变量构成，第一个变量值范围[0,1],第二个变量值范围[0,100]。</li>
+<li>如果某一特征的方差数量级较大，可能会主导目标函数，导致其他特征的影响被忽略。</li>
+</ul>
+<p><strong>常用方法：</strong></p>
+<ul>
+<li><p><strong>标准化法</strong></p>
+<ul>
+<li>前提：特征值服从正态分布</li>
+<li>需要计算特征的 均值X.mean 和 标准差X.std：</li>
+<li><p><img src="/posts/48513/标准法.png"></p></li>
+<li>标准差 (Standard Deviation)，又称均方差
+<ul>
+<li>用 <span class="math inline">\(\sigma\)</span> 表示，是方差的算术平方根。<img src="/posts/48513/均方差.png"></li>
+<li>标准差：反应一个数据集的离散程度。</li>
+<li>例如两组数的集合{0,5,9,1,4}和{5,6,8,9}其平均值都是7，但第二个集合具有较小的标准差。</li>
+</ul></li>
+</ul></li>
+<li><strong>区间缩放法</strong>
+<ul>
+<li>区间缩放法利用了 <strong>边界值信息</strong>，将 特征的取值区间 缩放到某个特定范围。假设max和min为希望的调整后范围，则
+<ul>
+<li><span class="math inline">\(X_{scaled} = \frac{(X(axis=0) - X.min(axis=0)) }{(X.max(axis=0) - X.min(axis=0))} *(max - min) + min ​\)</span></li>
+</ul></li>
+<li>由于希望的调整后范围一般为[0, 1]。此时，公式变为：
+<ul>
+<li><span class="math inline">\(X_{scaled} = \frac{(X(axis=0) - X.min(axis=0)) }{(X.max(axis=0) - X.min(axis=0))} ​\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="特征值的归一化">特征值的归一化</h3>
+<p>归一化，也称规范化（Normalizer）</p>
+<ul>
+<li><p>归一化是依照 <u><strong>特征矩阵的 行（即样本）</strong></u>处理数据</p></li>
+<li><ul>
+<li>其目的在于 <strong>样本向量</strong> 在 点乘运算 或 计算相似性时，拥有统一的标准</li>
+<li>也就是说，<u>都转化为“单位向量”</u>。即使每个样本的范式(norm)等于1。</li>
+</ul></li>
+<li><p>规则为 L1 norm 的 归一化 公式如下：</p>
+<ul>
+<li><span class="math inline">\(x^{&#39;} = \frac{x}{\sum_{j=0}^{n-1}|x_j|}​\)</span></li>
+</ul></li>
+<li><p>规则为 L2 norm 的 归一化 公式如下：</p>
+<ul>
+<li><span class="math inline">\(x^{&#39;} = \frac{x}{\sum_{j=0}^{n-1}x_j^2}​\)</span></li>
+</ul></li>
+</ul>
+<h3 id="定量特征的二值化"><strong>定量特征的二值化</strong></h3>
+<p>应用背景：</p>
+<ul>
+<li>对于某些定量特征，需要 将 <strong>定量信息</strong> 转为 <strong>区间划分</strong>。如将考试成绩转为“及格”或“不及格”</li>
+</ul>
+<p>方法：</p>
+<ul>
+<li>设定一个阈值，大于或者等于阈值的赋值为1，小于阈值的赋值为0，公式表达:</li>
+</ul>
+<p><span class="math display">\[
+x^{&#39;} = 
+\begin{cases}
+1, x&gt;=threshold \\
+0, x &lt; threshold
+\end{cases}
+\]</span></p>
+<h3 id="缺失特征值的弥补计算">缺失特征值的弥补计算</h3>
+<p>背景：</p>
+<ul>
+<li>数据获取时，由于某些原因缺少某些数值，需要进行弥补。</li>
+</ul>
+<p>常见的弥补策略：</p>
+<ul>
+<li>利用 同一特征 的 均值 进行弥补。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">举例：counts=[[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">             [<span class="number">3</span>,<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">             [NaN,<span class="number">0</span>,<span class="number">0</span>]]</span><br><span class="line">则，NaN可以弥补为同列上其他数据的均值，即(<span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>)/<span class="number">3</span>=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建多项式特征">创建多项式特征</h3>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602143425053-1431616999.png"></p>
+<h3 id="特征选择">特征选择</h3>
+<ul>
+<li>什么是特征选择？选择对于学习任务（如分类问题）有帮助的若干特征。</li>
+<li>为什么要进行特征选择？
+<ol type="1">
+<li>降维以提升模型的效率</li>
+<li>降低学习任务难度　　</li>
+<li>增加模型的可解释性。</li>
+</ol></li>
+<li>特征选择的角度：
+<ol type="1">
+<li>特征是否发散：对于不发散的特征,样本在其维度上差异性较小</li>
+<li>特征与目标的相关性：应当优先选择与目标相关性高的特征</li>
+</ol></li>
+<li>几种常见的特征选择方法：</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>方差选择法</strong>
+<ul>
+<li>原理：方差非常小的特征维度，对于样本的区分作用很小，可以剔除。</li>
+</ul></li>
+<li><ul>
+<li>例如，假设数据集为布尔特征，想去掉那些，超过80%情况下为1或者为0的特征。由于布尔特征是 Bernoulli(伯努利)随机变量，其方差可以计算为Var[x]=p<em>(1-p)，因此阈值为0.8</em>(1-0.8)=0.16</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602145133883-90169868.png"></p>
+<ul>
+<li><strong>皮尔森相关系数法</strong>
+<ul>
+<li>皮尔森相关系数( Pearson correlation coefficient)：显示两个随机变量之间线性关系的强度和方向。</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602145341213-582027351.png"></p>
+<ul>
+<li><ul>
+<li>计算完毕后，可以将与目标值相关性较小的特征过滤掉。</li>
+<li>Tip: Pearson相关系数，对线性关系比较敏感。如果关系是非线性的，即便两个变量具有一一对应的关系，Pearso相关性也可能会接近0。</li>
+</ul></li>
+<li><p><strong>基于森林的特征选择法</strong></p>
+<ul>
+<li>其原理是某些分类器，自身提供了特征的重要性分值。因此可以直接调用这些分类器，得到特征重要性分值，并排序。</li>
+</ul></li>
+<li><p><strong>递归特征消除法</strong></p>
+<ol type="1">
+<li>首先在初始特征或者权重特征集合上训练。通过学习器返回的coef_属性或者 feature_ importances_属性来获得每个特征的重要程度</li>
+<li>然后最小权重的特征被移除。</li>
+<li>这个过程递归进行，直到希望的特征数目满足为止。</li>
+</ol></li>
+</ul>
+</blockquote>
+<h3 id="特征降维"><strong>特征降维</strong></h3>
+<blockquote>
+<p>降维本质上是从一个维度空间映射到另一个维度空间。</p>
+<p>常见特征降维方法：</p>
+<ul>
+<li><p><strong><u>线性判别分析</u></strong>( (Linear Discriminant analysis，简称LDA)是一种 <strong>监督学习</strong> 的降维技术，即数据集的每个样本有类别输出。</p></li>
+<li><ul>
+<li>LDA的基本思想: “投影后类内方差最小，类间方差最大”。</li>
+<li>即将数据在 <strong>低维度</strong> 上进行投影，
+<ul>
+<li>投影后希望 同类数据的投影点尽可能接近，</li>
+<li>而 不同类数据 的 类别中心 之间的 距离尽可能的大。(右图好)</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602150326253-1586772457.png"></p>
+<ul>
+<li><strong><u>主成分分析</u></strong>( principal component analysis)是一种 <strong>无监督的降维方法</strong>。
+<ul>
+<li>采用数学变换，把给定的一组相关特征维度，</li>
+<li>通过 线性换转 成另一组不相关的维度(即 principal components)，</li>
+<li>这些新的维度照 <strong><u>方差</u></strong> 依次递减的顺序排列：形成第一主成分、第二主成分等。</li>
+<li>应用：高维数据在二维平面上进行展示。</li>
+</ul></li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602150942838-1826314432.png"></p>
+</blockquote>
+<h2 id="实例使用sklearn对文档进行向量化">实例：使用sklearn对文档进行向量化</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">演示内容：文档的向量化</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line">corpus = [</span><br><span class="line"><span class="string">'Jobs was the chairman of Apple Inc., and he was very famous'</span>,</span><br><span class="line"><span class="string">'I like to use apple computer'</span>,</span><br><span class="line"><span class="string">'And I also like to eat apple'</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#未经停用词过滤的文档向量化</span></span><br><span class="line">vectorizer =CountVectorizer()</span><br><span class="line">print(vectorizer.fit_transform(corpus).todense())  <span class="comment">#转化为完整特征矩阵</span></span><br><span class="line">print(vectorizer.vocabulary_)</span><br><span class="line">print(<span class="string">" "</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#经过停用词过滤后的文档向量化</span></span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line">nltk.download(<span class="string">'stopwords'</span>)       <span class="comment"># 没有这个文件，就需要下载 </span></span><br><span class="line">stopwords = nltk.corpus.stopwords.words(<span class="string">'english'</span>)</span><br><span class="line"><span class="keyword">print</span> (stopwords)</span><br><span class="line"></span><br><span class="line">print(<span class="string">" "</span>)</span><br><span class="line">vectorizer =CountVectorizer(stop_words=<span class="string">'english'</span>)</span><br><span class="line">print(<span class="string">"after stopwords removal:\n"</span>, vectorizer.fit_transform(corpus).todense())</span><br><span class="line">print(<span class="string">"after stopwords removal:\n"</span>, vectorizer.vocabulary_)</span><br><span class="line"></span><br><span class="line">print(<span class="string">" "</span>)</span><br><span class="line"><span class="comment">#采用ngram模式进行文档向量化</span></span><br><span class="line">vectorizer =CountVectorizer(ngram_range=(<span class="number">1</span>,<span class="number">2</span>))    <span class="comment">#表示从1-2，既包括unigram，也包括bigram</span></span><br><span class="line">print(<span class="string">"N-gram mode:\n"</span>,vectorizer.fit_transform(corpus).todense())  <span class="comment">#转化为完整特征矩阵</span></span><br><span class="line">print(<span class="string">" "</span>)</span><br><span class="line">print(<span class="string">"N-gram mode:\n"</span>,vectorizer.vocabulary_)</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/817161/202006/817161-20200602170950118-199929201.png"></p>
+<h2 id="实例使用sklearn进行量纲缩放">实例：使用sklearn进行量纲缩放</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">演示内容：量纲的特征缩放</span></span><br><span class="line"><span class="string">（两种方法：标准化缩放法和区间缩放法。每种方法举了两个例子：简单二维矩阵和iris数据集）</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="comment">#方法1：标准化缩放法 例1：对简单示例二维矩阵的列数据进行</span></span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing   </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np  </span><br><span class="line"><span class="comment">#采用numpy的array表示，因为要用到其mean等函数，而list没有这些函数</span></span><br><span class="line">X = np.array([[<span class="number">0</span>, <span class="number">0</span>], </span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>], </span><br><span class="line">        [<span class="number">100</span>, <span class="number">1</span>], </span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>]])  </span><br><span class="line"><span class="comment"># calculate mean  </span></span><br><span class="line">X_mean = X.mean(axis=<span class="number">0</span>)  </span><br><span class="line"><span class="comment"># calculate variance   </span></span><br><span class="line">X_std = X.std(axis=<span class="number">0</span>)  </span><br><span class="line"><span class="comment">#print (X_std)</span></span><br><span class="line"><span class="comment"># standardize X  </span></span><br><span class="line">X1 = (X-X_mean)/X_std</span><br><span class="line"><span class="keyword">print</span> (X1)</span><br><span class="line"><span class="keyword">print</span> (<span class="string">""</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># we can also use function preprocessing.scale to standardize X  </span></span><br><span class="line">X_scale = preprocessing.scale(X)  </span><br><span class="line"><span class="keyword">print</span> (X_scale)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment">#方法1： 标准化缩放法 例2：对iris数据二维矩阵的列数据进行。这次采用一个集成的方法StandardScaler</span></span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X_scale = preprocessing.scale(iris.data)  </span><br><span class="line"><span class="keyword">print</span> (X_scale)</span><br><span class="line"> </span><br><span class="line"><span class="comment">#方法2： 区间缩放法 例3：对简单示例二维矩阵的列数据进行</span></span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"> </span><br><span class="line">data = [[<span class="number">0</span>, <span class="number">0</span>], </span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>], </span><br><span class="line">        [<span class="number">100</span>, <span class="number">1</span>], </span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>]]</span><br><span class="line"> </span><br><span class="line">scaler = MinMaxScaler()</span><br><span class="line">print(scaler.fit(data))</span><br><span class="line">print(scaler.transform(data))</span><br><span class="line"> </span><br><span class="line"><span class="comment">#方法2： 区间缩放法 例4：对iris数据二维矩阵的列数据进行</span></span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"> </span><br><span class="line">data = iris.data</span><br><span class="line"> </span><br><span class="line">scaler = MinMaxScaler()</span><br><span class="line">print(scaler.fit(data))</span><br><span class="line">print(scaler.transform(data))</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Douzi
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://douzujun.github.io/posts/48513.html" title="深度学习">https://douzujun.github.io/posts/48513.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/29139.html" rel="prev" title="机器学习">
+      <i class="fa fa-chevron-left"></i> 机器学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/8245.html" rel="next" title="深度学习代码索引">
+      深度学习代码索引 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一讲-深度学习概述"><span class="nav-number">1.</span> <span class="nav-text">第一讲 深度学习概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习的引出"><span class="nav-number">1.1.</span> <span class="nav-text">深度学习的引出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集及其拆分"><span class="nav-number">1.2.</span> <span class="nav-text">数据集及其拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集与有监督学习"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据集与有监督学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练集测试集拆分"><span class="nav-number">1.2.2.</span> <span class="nav-text">训练集测试集拆分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k折交叉验证的应用-用网格搜索来调超参数"><span class="nav-number">1.2.3.</span> <span class="nav-text">K折交叉验证的应用-用网格搜索来调超参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类及其性能度量"><span class="nav-number">1.3.</span> <span class="nav-text">分类及其性能度量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">1.3.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类性能度量"><span class="nav-number">1.3.2.</span> <span class="nav-text">分类性能度量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回归问题及其性能度量"><span class="nav-number">1.4.</span> <span class="nav-text">回归问题及其性能度量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回归分析-regression-analysis"><span class="nav-number">1.4.1.</span> <span class="nav-text">回归分析( regression analysis)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的回归性能度量方法"><span class="nav-number">1.4.2.</span> <span class="nav-text">常用的回归性能度量方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性的评价方法"><span class="nav-number">1.5.</span> <span class="nav-text">一致性的评价方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例绘制pr曲线"><span class="nav-number">1.6.</span> <span class="nav-text">实例：绘制PR曲线</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二讲-特征工程"><span class="nav-number">2.</span> <span class="nav-text">第二讲 特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特征工程"><span class="nav-number">2.1.</span> <span class="nav-text">特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自动分词"><span class="nav-number">2.1.1.</span> <span class="nav-text">自动分词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#词性标注"><span class="nav-number">2.1.2.</span> <span class="nav-text">词性标注</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#句法分析"><span class="nav-number">2.1.3.</span> <span class="nav-text">句法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自然语言处理工具"><span class="nav-number">2.1.4.</span> <span class="nav-text">自然语言处理工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向量空间模型及文本相似度计算"><span class="nav-number">2.2.</span> <span class="nav-text">向量空间模型及文本相似度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档的向量化表示bow假设和vsm模型"><span class="nav-number">2.2.1.</span> <span class="nav-text">文档的向量化表示：BOW假设和VSM模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#停用词"><span class="nav-number">2.2.2.</span> <span class="nav-text">停用词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#n-gram模型"><span class="nav-number">2.2.3.</span> <span class="nav-text">N-gram模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文档之间的欧式距离"><span class="nav-number">2.2.4.</span> <span class="nav-text">文档之间的欧式距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文档之间的余弦相似度"><span class="nav-number">2.2.5.</span> <span class="nav-text">文档之间的余弦相似度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ti-idf词条权重计算"><span class="nav-number">2.2.6.</span> <span class="nav-text">Ti-idf词条权重计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征处理特征缩放选择及降维"><span class="nav-number">2.3.</span> <span class="nav-text">特征处理(特征缩放、选择及降维)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征值的缩放"><span class="nav-number">2.3.1.</span> <span class="nav-text">特征值的缩放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征值的归一化"><span class="nav-number">2.3.2.</span> <span class="nav-text">特征值的归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定量特征的二值化"><span class="nav-number">2.3.3.</span> <span class="nav-text">定量特征的二值化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺失特征值的弥补计算"><span class="nav-number">2.3.4.</span> <span class="nav-text">缺失特征值的弥补计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建多项式特征"><span class="nav-number">2.3.5.</span> <span class="nav-text">创建多项式特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征选择"><span class="nav-number">2.3.6.</span> <span class="nav-text">特征选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征降维"><span class="nav-number">2.3.7.</span> <span class="nav-text">特征降维</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例使用sklearn对文档进行向量化"><span class="nav-number">2.4.</span> <span class="nav-text">实例：使用sklearn对文档进行向量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例使用sklearn进行量纲缩放"><span class="nav-number">2.5.</span> <span class="nav-text">实例：使用sklearn进行量纲缩放</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Douzi"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Douzi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/douzujun" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;douzujun" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jdouzi@qq.com" title="E-Mail → mailto:jdouzi@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/douzujun/" title="cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;douzujun&#x2F;" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>cnblogs</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Douzi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">82k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:14</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
